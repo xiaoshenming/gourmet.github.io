@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ch">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>微信</title>
+    <link rel="stylesheet" href="../CSS/index.css">
+
+</head>
+
+<body>
+    <div id="app">
+        <div class="box1" v-if="!loggedIn" key="login">
+            <div class="login1">
+                <span>微信</span>
+                <div class="icon">
+                    <img src="../images/login/settings.svg" alt="">
+                    <img src="../images/login/叉叉.png" alt="">
+
+                </div>
+            </div>
+            <div class="login2">
+                <img src="../images//login//头像.jpg" alt="">
+                <span>Small明</span>
+            </div>
+            <div class="login3">
+                <button class="btn" @click="handleLogin">登录</button>
+            </div>
+            <div class="login4">
+                <a>用其他方式登录</a>
+                <a href="https://szfilehelper.weixin.qq.com/">仅传输文件</a>
+            </div>
+
+        </div>
+
+        <transition name="fade">
+
+            <!-- 选择通讯录或者聊天消息表 -->
+            <div class="box2" v-if="loggedIn" key="main">
+                <div class="box3">
+                    <img style="margin-top:30px;width: 60%;" src="../images//login/头像.jpg" alt="">
+                    <img :src="chooseA ? '../images/admin/message_normal.png' : '../images/admin/message_press.png'"
+                        alt="" @click="click('message')">
+                    <img :src="chooseB ? '../images/admin/contacts_normal.png':'../images/admin/contacts_press.png'"
+                        alt="" @click="click('contacts')">
+                </div>
+
+                <!-- 搜索 -->
+                <div class="box4">
+                    <div class="title">
+                        <div class="st">
+                            <img class="search" src="../images/admin/search.svg" alt="">
+                            <input class="text" placehider="搜索">
+                        </div>
+                        <img class="plus" src="../images/admin/plus.svg" alt="">
+                    </div>
+
+
+
+                    <div class="box5" v-if="chooseA">
+                        <!-- 通讯录 -->
+                        <div v-for="item in chatList" :key="item.id" class="list" @click="choseUser(item.id)">
+                            <img :src="item.avatar" alt="">
+                            <div class="chat">
+                                <div class="up">
+                                    <span class="name">{{ item.name }}</span>
+                                    <span class="date">{{ item.time }}</span>
+                                </div>
+                                <div class="down"><span>{{ item.message }}</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="box5" v-if="chooseB">
+                        <!-- 聊条消息表 -->
+                        <div v-for="table in chatTable" :key="table.id" class="list" @click="choseUser(table.id)">
+                            <img :src="table.avatar" alt="">
+                            <div class="chat">
+                                <div class="up">
+                                    <span class="name">{{ table.name }}</span>
+                                    <span class="date">{{ table.time }}</span>
+                                    <button class="close" @click.stop="deleteContact(table)">-</button>
+                                </div>
+                                <div class="down"><span>{{ table.message }}</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="box6" v-if="showBox6">
+                    <!-- 聊天框信息 -->
+                    <div class="new" v-if="lookbox">
+                        <div class="title">
+                            <span>{{ lookbox.name }}</span>
+                            <div class="settings"></div>
+                        </div>
+
+                        <div class="box7">
+                            <div class="he">
+                            </div>
+                            <div class="me" v-for="item in chatListme" :key="item.id">
+                                <span class="time">{{ item.time }}</span>
+                                <div class="tell">
+                                    <div class="z" v-if="!item.image">
+                                        <div class="message">{{ item.message }}</div>
+                                    </div>
+                                    <img v-else :src="item.image" alt=""
+                                        style="width: 300px;max-width: 100%; height: auto;">
+                                    <img src="../images/login/头像.jpg" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- 发送 -->
+                    <div class="box8">
+                        <div class="title">
+                            <div class="z">
+                                <input type="file" id="imageInput" accept="image/*">
+                            </div>
+                            <div class="y">
+                                <button @click="handleImageUpload">发送图片</button>
+
+                            </div>
+                        </div>
+
+                        <!-- 聊天输入框 -->
+                        <div class="down">
+                            <textarea v-if="!selectedImage" type="text" v-model="inputMessage" class="in"
+                                placeholder="请输入" @keydown="handleKeyDown"></textarea>
+                            <div class="in" v-if="selectedImage">
+                                <!-- 显示选中的图片 -->
+                                <img :src="selectedImage" alt="选中的图片预览"
+                                    style="width:98px;max-width: 100%; max-height: 98px;">
+                            </div>
+
+                            <button @click="sendMessage" class="launch">发送(S)</button>
+                        </div>
+
+
+
+
+
+
+                    </div>
+
+                </div>
+                <div class="box6t" v-if="!showBox6">
+                    <img src="../images/login/wx.png">
+                </div>
+
+
+
+            </div>
+    </div>
+    </transition>
+
+    </div>
+
+    <script src="../JS/vue.js"></script>
+    <script src="../JS/index.js"></script>
+
+</body>
+
+</html>
