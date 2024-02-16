@@ -4,7 +4,8 @@ body {
   display: flex;
   justify-content: center; /* 水平居中 */
   align-items: center; /* 垂直居中 */
-  height: 100vh; /* 设置高度为视口高度，使子元素垂直居中生效 */
+  height: 100%; /* 设置高度为视口高度，使子元素垂直居中生效 */
+  width: 920px;
 }
 
 .box1 {
